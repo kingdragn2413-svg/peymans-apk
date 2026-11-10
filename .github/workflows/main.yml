@@ -23,11 +23,12 @@ jobs:
 
       - name: Install and Build Android
         run: |
+          rm -rf package.json package-lock.json node_modules android
           npm init -y
-          npm install @capacitor/core @capacitor/cli @capacitor/android
-          rm -rf android
+          npm install @capacitor/core@6 @capacitor/cli@6 @capacitor/android@6
           npx cap add android
           npx cap sync android
+          echo "configurations.all { resolutionStrategy { force 'org.jetbrains.kotlin:kotlin-stdlib:1.8.22', 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22', 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22' } }" >> android/app/build.gradle
 
       - name: Build Debug APK
         working-directory: ./android
