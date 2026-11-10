@@ -4,11 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>پیمان اراده ۵.۰ | قلمرو سه‌بعدی کنکور</title>
-    <meta name="description" content="شبیه‌ساز سه‌بعدی مطالعه و تست‌زنی کنکور با ۲۸ گونه گیاهی ۵ مرحله‌ای، دهکده زنده با شکار و ماهی‌گیری و آثار تاریخی" />
-    <meta property="og:title" content="پیمان اراده ۵.۰ | قلمرو سه‌بعدی کنکور" />
-    <meta property="og:description" content="شبیه‌ساز سه‌بعدی مطالعه و تست‌زنی کنکور با ۲۸ گونه گیاهی ۵ مرحله‌ای، دهکده زنده با شکار و ماهی‌گیری و آثار تاریخی" />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -16,7 +11,7 @@
     <link rel="stylesheet" crossorigin href="./assets/index-B5zK9wcn.css">
 
     <style>
-      /* ۱. حذف کامل نوار سفید/خاکستری دور صفحه و اسکرول‌بارهای زشت */
+      /* ۱. حذف کامل نوار سفید/خاکستری دور صفحه و اسکرول‌بارها */
       html, body, #root {
         background-color: #060b14 !important;
         margin: 0 !important;
@@ -34,7 +29,6 @@
         width: 0px !important;
         height: 0px !important;
         display: none !important;
-        background: transparent !important;
       }
       * {
         scrollbar-width: none !important;
@@ -52,32 +46,28 @@
         display: block !important;
       }
 
-      /* ۲. تنظیم سایز منوها و نوارها در موبایل (حالت افقی) تا روی هم نیفتند */
+      /* ۲. تنظیم سایز منوها در موبایل افقی تا روی هم نیفتند */
       @media screen and (max-width: 1024px), screen and (max-height: 600px) {
-        html {
-          font-size: 10px !important;
-        }
+        html { font-size: 10px !important; }
       }
       @media screen and (max-height: 430px) {
-        html {
-          font-size: 9px !important;
-        }
+        html { font-size: 9px !important; }
       }
 
-      /* ۳. رفع مشکل اسکرول نشدن پنجره ثبت تست و سایر مودال‌ها */
+      /* ۳. رفع مشکل اسکرول نشدن پنجره ثبت تست و مودال‌ها */
       .fixed.inset-0:not(:has(canvas)) {
         overflow-y: auto !important;
         overflow-x: hidden !important;
         -webkit-overflow-scrolling: touch !important;
         touch-action: pan-y !important;
         align-items: flex-start !important;
-        padding-top: 10px !important;
-        padding-bottom: 40px !important;
+        padding-top: 8px !important;
+        padding-bottom: 45px !important;
       }
 
       .fixed.inset-0:not(:has(canvas)) > div {
         max-height: none !important;
-        margin: 8px auto 36px auto !important;
+        margin: 6px auto 40px auto !important;
         touch-action: pan-y !important;
       }
 
@@ -87,81 +77,52 @@
         touch-action: pan-y !important;
       }
 
-      [class*="overflow-x-auto"] {
-        overflow-x: auto !important;
-        -webkit-overflow-scrolling: touch !important;
-        touch-action: pan-x !important;
-      }
-
-      /* ۴. استایل جوی‌استیک کالاف دیوتی برای حرکت در دهکده */
+      /* ۴. جوی‌استیک کالاف دیوتی برای دهکده */
       #cod-joystick-zone {
         position: fixed;
-        bottom: 22px;
-        left: 26px;
-        width: 116px;
-        height: 116px;
-        z-index: 9999;
+        bottom: 20px;
+        left: 24px;
+        width: 114px;
+        height: 114px;
+        z-index: 9990;
         display: none;
         touch-action: none;
-        user-select: none;
       }
 
       #cod-joystick-base {
         width: 100%;
         height: 100%;
         border-radius: 50%;
-        background: radial-gradient(circle, rgba(16, 185, 129, 0.12) 0%, rgba(6, 11, 20, 0.65) 100%);
-        border: 2px solid rgba(16, 185, 129, 0.55);
-        box-shadow: 0 0 18px rgba(16, 185, 129, 0.25), inset 0 0 12px rgba(16, 185, 129, 0.15);
+        background: radial-gradient(circle, rgba(16, 185, 129, 0.14) 0%, rgba(6, 11, 20, 0.7) 100%);
+        border: 2px solid rgba(16, 185, 129, 0.6);
+        box-shadow: 0 0 18px rgba(16, 185, 129, 0.25);
         position: relative;
         backdrop-filter: blur(4px);
       }
 
-      /* فلش‌های راهنمای چهار جهت روی جوی‌استیک */
-      #cod-joystick-base::before {
-        content: '▲';
-        position: absolute;
-        top: 6px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 9px;
-        color: rgba(16, 185, 129, 0.6);
-      }
-      #cod-joystick-base::after {
-        content: '▼';
-        position: absolute;
-        bottom: 6px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 9px;
-        color: rgba(16, 185, 129, 0.6);
-      }
-
       #cod-joystick-stick {
-        width: 46px;
-        height: 46px;
+        width: 44px;
+        height: 44px;
         border-radius: 50%;
         background: radial-gradient(circle at 30% 30%, #34d399, #059669);
         border: 2px solid #a7f3d0;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), 0 0 10px rgba(16, 185, 129, 0.6);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         pointer-events: none;
-        transition: transform 0.04s linear;
       }
 
-      /* دکمه پرش / اکشن (Space) کنار جوی‌استیک */
       #cod-action-btn {
         position: fixed;
-        bottom: 34px;
-        left: 156px;
+        bottom: 32px;
+        left: 152px;
         width: 48px;
         height: 48px;
         border-radius: 50%;
-        background: rgba(15, 23, 42, 0.75);
-        border: 2px solid rgba(251, 191, 36, 0.65);
+        background: rgba(15, 23, 42, 0.8);
+        border: 2px solid rgba(251, 191, 36, 0.7);
         color: #fbbf24;
         font-family: 'Vazirmatn', sans-serif;
         font-size: 10px;
@@ -169,27 +130,128 @@
         display: none;
         align-items: center;
         justify-content: center;
-        z-index: 9999;
-        box-shadow: 0 0 12px rgba(251, 191, 36, 0.25);
-        backdrop-filter: blur(4px);
-        touch-action: none;
+        z-index: 9990;
       }
-      #cod-action-btn:active {
-        transform: scale(0.92);
-        background: rgba(251, 191, 36, 0.25);
+
+      /* ۵. دکمه شناور و پنجره قفل برنامه‌های مزاحم اندروید */
+      #android-blocker-fab {
+        position: fixed;
+        bottom: 14px;
+        right: 14px;
+        z-index: 9995;
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+        border: 1.5px solid #10b981;
+        color: #ecfdf5;
+        font-family: 'Vazirmatn', sans-serif;
+        font-size: 11px;
+        font-weight: 700;
+        padding: 7px 12px;
+        border-radius: 999px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.6), 0 0 10px rgba(16,185,129,0.3);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        cursor: pointer;
+      }
+
+      #android-blocker-modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(2, 6, 23, 0.85);
+        backdrop-filter: blur(6px);
+        z-index: 10000;
+        display: none;
+        align-items: flex-start;
+        justify-content: center;
+        overflow-y: auto;
+        padding: 16px;
+        font-family: 'Vazirmatn', sans-serif;
+      }
+
+      .blocker-card {
+        background: #0f172a;
+        border: 1.5px solid #1e293b;
+        border-radius: 16px;
+        width: 100%;
+        max-width: 520px;
+        padding: 16px;
+        color: #f8fafc;
+        margin: 10px auto 40px auto;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+      }
+
+      .app-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+        margin: 12px 0;
+      }
+
+      .app-item {
+        background: #1e293b;
+        border: 1px solid #334155;
+        border-radius: 10px;
+        padding: 8px 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        cursor: pointer;
+      }
+      .app-item input {
+        width: 16px;
+        height: 16px;
+        accent-color: #10b981;
       }
     </style>
   </head>
   <body>
     <div id="root"></div>
 
-    <!-- جوی‌استیک لمسی و دکمه Space -->
+    <!-- جوی‌استیک لمسی دهکده -->
     <div id="cod-joystick-zone">
       <div id="cod-joystick-base">
         <div id="cod-joystick-stick"></div>
       </div>
     </div>
-    <button id="cod-action-btn" type="button">پرش / Space</button>
+    <button id="cod-action-btn" type="button">پرش</button>
+
+    <!-- دکمه و مودال قفل برنامه‌های مزاحم اندروید -->
+    <button id="android-blocker-fab" type="button">🛡️ قفل اپ‌های مزاحم و زنگ</button>
+
+    <div id="android-blocker-modal">
+      <div class="blocker-card">
+        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #1e293b;padding-bottom:10px;">
+          <div style="font-size:14px;font-weight:800;color:#34d399;">🛡️ قفل سخت‌افزاری برنامه‌های مزاحم در اندروید</div>
+          <button id="close-blocker-modal" style="background:#ef4444;color:#fff;border:none;border-radius:8px;padding:4px 10px;font-family:inherit;font-size:12px;">بستن</button>
+        </div>
+
+        <p style="font-size:11px;color:#94a3b8;line-height:1.7;margin:10px 0;">
+          برنامه‌هایی که تیک بزنی، به محض زدن دکمه <b>«شروع مطالعه»</b> قفل می‌شوند. حتی اگر بازی پیمان اراده را کامل ببندی، تا پایان تایمر اجازه ورود به این برنامه‌ها را نخواهی داشت و در پایان تایمر، زنگ گوشی به صدا درمی‌آید!
+        </p>
+
+        <div id="acc-status-box" style="background:#1e293b;border:1px solid #f59e0b;border-radius:10px;padding:10px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:8px;">
+          <span id="acc-status-text" style="font-size:11px;color:#fbbf24;">⚠️ برای کار کردن قفل در پس‌زمینه، مجوز سرویس قفل را روشن کن:</span>
+          <button id="open-acc-btn" style="background:#f59e0b;color:#000;border:none;border-radius:8px;padding:6px 10px;font-family:inherit;font-size:11px;font-weight:bold;white-space:nowrap;">فعال‌سازی در تنظیمات</button>
+        </div>
+
+        <div class="app-grid" id="blocker-app-list">
+          <label class="app-item"><input type="checkbox" value="com.instagram.android" checked> 📸 اینستاگرام</label>
+          <label class="app-item"><input type="checkbox" value="org.telegram.messenger,org.thunderdog.challegram,ir.ilmili.telegraph,com.radolyn.ayugram" checked> ✈️ تلگرام (همه نسخه‌ها)</label>
+          <label class="app-item"><input type="checkbox" value="com.google.android.youtube" checked> ▶️ یوتیوب</label>
+          <label class="app-item"><input type="checkbox" value="ir.resaneh1.iptv,ir.eitaa.messenger,ir.nasim,ir.gap.messenger" checked> 💬 روبیکا، ایتا و بله</label>
+          <label class="app-item"><input type="checkbox" value="com.activision.callofduty.shooter,com.tencent.ig,com.dts.freefireth" checked> 🔫 کالاف دیوتی و پابجی</label>
+          <label class="app-item"><input type="checkbox" value="com.supercell.clashofclans,com.supercell.clashroyale,com.supercell.brawlstars" checked> ⚔️ کلش آف کلنز و رویال</label>
+          <label class="app-item"><input type="checkbox" value="com.zhiliaoapp.musically,com.ss.android.ugc.trill,com.twitter.android,com.whatsapp" checked> 📱 تیک‌تاک، ایکس و واتساپ</label>
+          <label class="app-item"><input type="checkbox" value="com.android.chrome,org.mozilla.firefox,com.sec.android.app.sbrowser"> 🌐 مرورگرهای وب (کروم)</label>
+        </div>
+
+        <div style="display:flex;gap:8px;margin-top:12px;">
+          <button id="save-blocker-btn" style="flex:1;background:#10b981;color:#022c22;border:none;border-radius:10px;padding:9px;font-family:inherit;font-size:12px;font-weight:800;">💾 ذخیره لیست سیاه اندروید</button>
+          <button id="stop-alarm-btn" style="background:#334155;color:#f8fafc;border:none;border-radius:10px;padding:9px 12px;font-family:inherit;font-size:11px;">🔕 قطع صدای زنگ</button>
+        </div>
+      </div>
+    </div>
 
     <!-- اسکریپت ضدتقلب مطالعه کاغذی -->
     <script>
@@ -202,8 +264,6 @@
 
   let allowNextPaperClick = false;
   let isCurrentlyInPaperModal = false;
-  let currentRealElapsedCap = 600;
-  let currentReferenceLabel = 'ساعت ۵:۰۰ صبح امروز';
 
   function getTodayPaperUsage() {
     const todayFa = new Date().toLocaleDateString('fa-IR');
@@ -266,10 +326,7 @@
     }
 
     const elapsedRealMins = Math.max(0, Math.floor((now - referenceMs) / 60000));
-    return {
-      elapsedRealMins,
-      referenceLabel,
-    };
+    return { elapsedRealMins, referenceLabel };
   }
 
   window.addEventListener(
@@ -291,54 +348,31 @@
         e.preventDefault();
 
         const usage = getTodayPaperUsage();
-
         if (usage.count >= MAX_DAILY_PAPER_LOGS) {
-          alert(
-            `🔒 پایان سهمیه روزانه:\nشما امروز هر ${MAX_DAILY_PAPER_LOGS} سهمیه «ثبت مطالعه روی کاغذ» خود را استفاده کرده‌اید!\nبرای پارت‌های بعدی حتماً تایمر زنده را روشن کنید.`
-          );
+          alert(`🔒 پایان سهمیه روزانه:\nشما امروز هر ${MAX_DAILY_PAPER_LOGS} سهمیه «ثبت مطالعه روی کاغذ» خود را استفاده کرده‌اید!\nبرای پارت‌های بعدی حتماً تایمر زنده را روشن کنید.`);
           return;
         }
 
         const requestedMins = getSelectedStudyMinutesFromDOM();
         const { elapsedRealMins, referenceLabel } = getRealElapsedMinutesCap();
-        currentRealElapsedCap = Math.min(MAX_SESSION_MINS, elapsedRealMins);
-        currentReferenceLabel = referenceLabel;
 
         if (elapsedRealMins < 15) {
-          alert(
-            `⛔ قفل ضدتقلب زمان واقعی:\nاز ${referenceLabel} فقط ${elapsedRealMins} دقیقه در دنیای واقعی گذشته است!\nبرای ثبت پارت کاغذی جدید باید حداقل ۱۵ دقیقه از آخرین پارت شما در دنیای واقعی گذشته باشد.`
-          );
+          alert(`⛔ قفل ضدتقلب زمان واقعی:\nاز ${referenceLabel} فقط ${elapsedRealMins} دقیقه در دنیای واقعی گذشته است!\nبرای ثبت پارت کاغذی جدید باید حداقل ۱۵ دقیقه از آخرین پارت شما گذشته باشد.`);
           return;
         }
 
         if (requestedMins > elapsedRealMins) {
-          alert(
-            `⛔ خطای محاسباتی زمان واقعی!\n\n` +
-            `• زمان انتخابی شما روی اسلایدر: ${requestedMins} دقیقه\n` +
-            `• زمان واقعی گذشته از ${referenceLabel}: فقط ${elapsedRealMins} دقیقه!\n\n` +
-            `شما نمی‌توانید بیشتر از زمانی که در واقعیت گذشته است (${elapsedRealMins} دقیقه) مطالعه ثبت کنید. لطفاً ابتدا اسلایدر زمان پارت را به ${Math.min(120, elapsedRealMins)} دقیقه یا کمتر کاهش دهید.`
-          );
-          return;
-        }
-
-        if (requestedMins > MAX_SESSION_MINS) {
-          alert(
-            `⛔ سقف زمان مجاز:\nدر هر نوبت نمی‌توانید بیشتر از ۱۰ ساعت (${MAX_SESSION_MINS} دقیقه) مطالعه ثبت کنید.`
-          );
+          alert(`⛔ خطای محاسباتی زمان واقعی!\n• زمان انتخابی روی اسلایدر: ${requestedMins} دقیقه\n• زمان واقعی گذشته از ${referenceLabel}: فقط ${elapsedRealMins} دقیقه!\nلطفاً اسلایدر زمان پارت را به ${Math.min(120, elapsedRealMins)} دقیقه یا کمتر کاهش دهید.`);
           return;
         }
 
         const note = prompt(
           `✅ بررسی زمان واقعی تایید شد! (سهمیه امروز: ${usage.count + 1} از ${MAX_DAILY_PAPER_LOGS})\n` +
-          `• زمان واقعی گذشته از ${referenceLabel}: ${elapsedRealMins} دقیقه\n` +
-          `• سقف مجاز هر نوبت: حداکثر ۱۰ ساعت و حداکثر ${MAX_SESSION_TESTS} تست\n\n` +
           `📝 لطفاً نام دقیق مبحث، شماره صفحات و خلاصه نکاتی که روی کاغذ خوانده‌اید را بنویسید (حداقل ۳۰ حرف):`
         );
 
         if (!note || note.trim().length < 30) {
-          alert(
-            '❌ ثبت لغو شد! برای باز شدن قفل ثبت کاغذی، نوشتن توضیح کامل مبحث (حداقل ۳۰ حرف) الزامی است.'
-          );
+          alert('❌ ثبت لغو شد! نوشتن توضیح کامل مبحث (حداقل ۳۰ حرف) الزامی است.');
           return;
         }
 
@@ -354,7 +388,6 @@
         const modalContainer = btn.closest('.fixed.inset-0');
         if (modalContainer) {
           const numInputs = Array.from(modalContainer.querySelectorAll('input[type="number"]'));
-
           let totalTestsEntered = 0;
           let totalMinsEntered = getSelectedStudyMinutesFromDOM();
 
@@ -362,40 +395,25 @@
             const rMins = parseInt(numInputs[0].value, 10) || 0;
             const tMins = parseInt(numInputs[1].value, 10) || 0;
             const aMins = parseInt(numInputs[2].value, 10) || 0;
-            if (rMins + tMins + aMins > 0) {
-              totalMinsEntered = rMins + tMins + aMins;
-            }
+            if (rMins + tMins + aMins > 0) totalMinsEntered = rMins + tMins + aMins;
             totalTestsEntered = parseInt(numInputs[3].value, 10) || 0;
           } else if (numInputs.length >= 4) {
             totalTestsEntered = parseInt(numInputs[0].value, 10) || 0;
           }
 
-          const { elapsedRealMins, referenceLabel } = getRealElapsedMinutesCap();
+          const { elapsedRealMins } = getRealElapsedMinutesCap();
 
-          if (totalMinsEntered > MAX_SESSION_MINS) {
+          if (totalMinsEntered > MAX_SESSION_MINS || totalMinsEntered > elapsedRealMins) {
             e.stopImmediatePropagation();
             e.preventDefault();
-            alert(
-              `⛔ خطای سقف زمان:\nشما نمی‌توانید در یک نوبت بیشتر از ۱۰ ساعت (${MAX_SESSION_MINS} دقیقه) مطالعه ثبت کنید! (مقدار واردشده: ${totalMinsEntered} دقیقه)`
-            );
-            return;
-          }
-
-          if (totalMinsEntered > elapsedRealMins) {
-            e.stopImmediatePropagation();
-            e.preventDefault();
-            alert(
-              `⛔ خطای فیزیک زمان!\nاز ${referenceLabel} تا الان فقط ${elapsedRealMins} دقیقه در دنیای واقعی گذشته است!\nشما نمی‌توانید ${totalMinsEntered} دقیقه مطالعه ثبت کنید. لطفاً زمان را به حداکثر ${elapsedRealMins} دقیقه کاهش دهید.`
-            );
+            alert(`⛔ خطای زمان! حداکثر زمان قابل ثبت بر اساس زمان واقعی سپری‌شده ${elapsedRealMins} دقیقه است.`);
             return;
           }
 
           if (totalTestsEntered > MAX_SESSION_TESTS) {
             e.stopImmediatePropagation();
             e.preventDefault();
-            alert(
-              `⛔ خطای سقف تعداد تست!\nدر ثبت مطالعه روی کاغذ، حداکثر تعداد تست مجاز در هر سری ${MAX_SESSION_TESTS} تست است (عدد واردشده توسط شما: ${totalTestsEntered} تست).\nلطفاً تعداد کل تست‌ها را به ${MAX_SESSION_TESTS} یا کمتر اصلاح کنید.`
-            );
+            alert(`⛔ حداکثر تعداد تست مجاز در هر سری ${MAX_SESSION_TESTS} تست است.`);
             return;
           }
         }
@@ -413,9 +431,145 @@
 })();
     </script>
 
-    <!-- اسکریپت جوی‌استیک کالاف دیوتی + چرخش و زوم روان لمسی سه‌بعدی -->
+    <!-- اسکریپت قفل اندروید، تایمر پس‌زمینه، حذف رادار ۴۵ ثانیه‌ای و جوی‌استیک دهکده -->
     <script>
 (function () {
+  // ۱. غیرفعال کردن خودکار و مخفی کردن کامل «رادار حضور ۴۵ ثانیه‌ای» از بازی
+  function disableAndHideRadar45() {
+    const buttons = document.querySelectorAll('button');
+    for (let i = 0; i < buttons.length; i++) {
+      const btn = buttons[i];
+      const txt = (btn.textContent || '').trim();
+      if (txt === 'فعال حین تایمر' && !btn.dataset.radarDisabled) {
+        btn.dataset.radarDisabled = 'true';
+        btn.click();
+      }
+    }
+
+    const elements = document.querySelectorAll('div, p');
+    for (let i = 0; i < elements.length; i++) {
+      const el = elements[i];
+      const t = el.textContent || '';
+      if (t.includes('مدت پارت') || t.includes('لیست سیاه برنامه‌های مسدود')) continue;
+
+      if (
+        t.includes('رادار حضور خودکار ۴۵ ثانیه‌ای') ||
+        t.includes('در فواصل تصادفی رادار ۴۵ ثانیه‌ای')
+      ) {
+        if (el.tagName === 'P' || el.children.length <= 4) {
+          el.style.display = 'none';
+        }
+      }
+    }
+  }
+  setInterval(disableAndHideRadar45, 400);
+
+  // ۲. مدیریت قفل برنامه‌های مزاحم اندروید و زنگ پایان تایمر
+  const BLOCKED_STORAGE_KEY = 'peyman_android_blocked_pkgs_v1';
+  const fabBtn = document.getElementById('android-blocker-fab');
+  const modal = document.getElementById('android-blocker-modal');
+  const closeBtn = document.getElementById('close-blocker-modal');
+  const saveBtn = document.getElementById('save-blocker-btn');
+  const openAccBtn = document.getElementById('open-acc-btn');
+  const stopAlarmBtn = document.getElementById('stop-alarm-btn');
+  const accStatusText = document.getElementById('acc-status-text');
+  const accStatusBox = document.getElementById('acc-status-box');
+
+  function getSavedBlockedCsv() {
+    const saved = localStorage.getItem(BLOCKED_STORAGE_KEY);
+    if (saved !== null) return saved;
+    const checks = Array.from(document.querySelectorAll('#blocker-app-list input:checked'));
+    return checks.map(c => c.value).join(',');
+  }
+
+  function refreshAccessibilityStatus() {
+    if (window.AndroidNative && typeof window.AndroidNative.isAccessibilityEnabled === 'function') {
+      const enabled = window.AndroidNative.isAccessibilityEnabled();
+      if (enabled) {
+        accStatusBox.style.borderColor = '#10b981';
+        accStatusText.style.color = '#34d399';
+        accStatusText.textContent = '✅ سرویس قفل سخت‌افزاری اندروید در پس‌زمینه فعال است.';
+        openAccBtn.textContent = 'تنظیمات مجوز';
+      } else {
+        accStatusBox.style.borderColor = '#f59e0b';
+        accStatusText.style.color = '#fbbf24';
+        accStatusText.textContent = '⚠️ مجوز قفل اپ‌ها خاموش است! از دکمه روبه‌رو در Accessibility روشنش کن:';
+        openAccBtn.textContent = 'فعال‌سازی مجوز';
+      }
+    }
+  }
+
+  fabBtn.addEventListener('click', function () {
+    refreshAccessibilityStatus();
+    modal.style.display = 'flex';
+  });
+
+  closeBtn.addEventListener('click', function () {
+    modal.style.display = 'none';
+  });
+
+  openAccBtn.addEventListener('click', function () {
+    if (window.AndroidNative && window.AndroidNative.openAccessibilitySettings) {
+      window.AndroidNative.openAccessibilitySettings();
+    } else {
+      alert('این قابلیت مخصوص نسخه نصبی اندروید (APK) است.');
+    }
+  });
+
+  saveBtn.addEventListener('click', function () {
+    const checks = Array.from(document.querySelectorAll('#blocker-app-list input:checked'));
+    const csv = checks.map(c => c.value).join(',');
+    localStorage.setItem(BLOCKED_STORAGE_KEY, csv);
+    if (window.AndroidNative && window.AndroidNative.updateBlockedPackages) {
+      window.AndroidNative.updateBlockedPackages(csv);
+    }
+    modal.style.display = 'none';
+  });
+
+  stopAlarmBtn.addEventListener('click', function () {
+    if (window.AndroidNative && window.AndroidNative.stopAlarm) {
+      window.AndroidNative.stopAlarm();
+    }
+  });
+
+  window.addEventListener('click', function (e) {
+    const btn = e.target.closest('button');
+    if (!btn || !btn.textContent) return;
+    const txt = btn.textContent;
+
+    if (txt.includes('دانلود دستیار ویندوز') || txt.includes('.bat')) {
+      e.preventDefault();
+      e.stopPropagation();
+      refreshAccessibilityStatus();
+      modal.style.display = 'flex';
+      return;
+    }
+
+    if (txt.includes('شروع مطالعه')) {
+      const rangeInput = document.querySelector('input[type="range"]');
+      const mins = rangeInput && rangeInput.value ? (parseInt(rangeInput.value, 10) || 45) : 45;
+      const durationSec = mins * 60;
+      const blockedCsv = getSavedBlockedCsv();
+
+      if (window.AndroidNative && window.AndroidNative.startStudyTimer) {
+        if (!window.AndroidNative.isAccessibilityEnabled()) {
+          const go = confirm('🛡️ برای اینکه برنامه‌های مزاحم (تلگرام، اینستاگرام و...) حین تایمر قفل شوند، می‌خواهی مجوز «پیمان اراده» را در تنظیمات Accessibility گوشی روشن کنی؟');
+          if (go) {
+            window.AndroidNative.openAccessibilitySettings();
+          }
+        }
+        window.AndroidNative.startStudyTimer(durationSec, blockedCsv);
+      }
+    }
+
+    if (txt.includes('توقف') || txt.includes('لغو') || txt.includes('ثبت در کارنامه')) {
+      if (window.AndroidNative && window.AndroidNative.stopStudyTimer) {
+        window.AndroidNative.stopStudyTimer();
+      }
+    }
+  }, true);
+
+  // ۳. جوی‌استیک کالاف دیوتی + چرخش روان سه‌بعدی
   const joyZone = document.getElementById('cod-joystick-zone');
   const joyStick = document.getElementById('cod-joystick-stick');
   const actionBtn = document.getElementById('cod-action-btn');
@@ -462,7 +616,6 @@
     updateMovementKeys({ w: false, a: false, s: false, d: false, shift: false });
   }
 
-  // ۱. تشخیص خودکار حضور در حالت قدم‌زدن در دهکده (نمای فرمانروا)
   function checkVillageMode() {
     const bodyText = document.body ? document.body.innerText : '';
     const isInRulerWalk =
@@ -474,13 +627,10 @@
     joyZone.style.display = shouldShow ? 'block' : 'none';
     actionBtn.style.display = shouldShow ? 'flex' : 'none';
 
-    if (!shouldShow) {
-      releaseAllKeys();
-    }
+    if (!shouldShow) releaseAllKeys();
   }
   setInterval(checkVillageMode, 350);
 
-  // ۲. منطق لمس جوی‌استیک ۳۶۰ درجه (با پشتیبانی از چندلمس هم‌زمان)
   let joyTouchId = null;
   const maxRadius = 40;
 
@@ -501,14 +651,13 @@
     joyStick.style.transform = `translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
 
     const threshold = 10;
-    const nextState = {
+    updateMovementKeys({
       w: dy < -threshold,
       s: dy > threshold,
       a: dx < -threshold,
       d: dx > threshold,
       shift: dist > maxRadius * 0.78
-    };
-    updateMovementKeys(nextState);
+    });
   }
 
   joyZone.addEventListener('touchstart', function (e) {
@@ -543,7 +692,6 @@
   joyZone.addEventListener('touchend', endJoystick, { passive: false });
   joyZone.addEventListener('touchcancel', endJoystick, { passive: false });
 
-  // دکمه Space (پرش / تایید رادار)
   actionBtn.addEventListener('touchstart', function (e) {
     e.stopPropagation();
     e.preventDefault();
@@ -556,7 +704,6 @@
     fireKey('keyup', 'space');
   }, { passive: false });
 
-  // ۳. چرخش روان دوربین با انگشت راست و زوم دو انگشتی روی محیط سه‌بعدی
   let lookTouchId = null;
   let lastLookX = 0;
   let lastLookY = 0;
@@ -606,7 +753,6 @@
     const canvas = document.querySelector('canvas');
     if (!canvas) return;
 
-    // زوم دو انگشتی (Pinch to Zoom)
     if (e.touches.length === 2 && joyTouchId === null) {
       e.preventDefault();
       const dx = e.touches[0].clientX - e.touches[1].clientX;
@@ -627,13 +773,10 @@
       return;
     }
 
-    // چرخش روان تک‌انگشتی
     for (let i = 0; i < e.changedTouches.length; i++) {
       const t = e.changedTouches[i];
       if (t.identifier === lookTouchId) {
-        if (e.target.closest('canvas')) {
-          e.preventDefault();
-        }
+        if (e.target.closest('canvas')) e.preventDefault();
         const dx = (t.clientX - lastLookX) * 1.35;
         const dy = (t.clientY - lastLookY) * 1.35;
         lastLookX = t.clientX;
@@ -651,9 +794,7 @@
       const t = e.changedTouches[i];
       if (t.identifier === lookTouchId) {
         lookTouchId = null;
-        if (canvas) {
-          dispatchSyntheticMouse(canvas, 'mouseup', t.clientX, t.clientY, 0, 0, 0);
-        }
+        if (canvas) dispatchSyntheticMouse(canvas, 'mouseup', t.clientX, t.clientY, 0, 0, 0);
         break;
       }
     }
