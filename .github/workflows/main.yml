@@ -23,7 +23,8 @@ jobs:
 
       - name: Install and Build Android
         run: |
-          npm install
+          npm init -y
+          npm install @capacitor/core @capacitor/cli @capacitor/android
           rm -rf android
           npx cap add android
           npx cap sync android
