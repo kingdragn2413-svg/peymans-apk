@@ -1,0 +1,9 @@
+{
+  "appId": "com.peyman.erade",
+  "appName": "پیمان اراده",
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  }
+}

@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>پیمان اراده ۵.۰ | قلمرو سه‌بعدی کنکور</title>
+    <meta name="description" content="شبیه‌ساز سه‌بعدی مطالعه و تست‌زنی کنکور با ۲۸ گونه گیاهی ۵ مرحله‌ای، دهکده زنده با شکار و ماهی‌گیری و آثار تاریخی" />
+    <meta property="og:title" content="پیمان اراده ۵.۰ | قلمرو سه‌بعدی کنکور" />
+    <meta property="og:description" content="شبیه‌ساز سه‌بعدی مطالعه و تست‌زنی کنکور با ۲۸ گونه گیاهی ۵ مرحله‌ای، دهکده زنده با شکار و ماهی‌گیری و آثار تاریخی" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <script type="module" crossorigin src="./assets/index-BfjH7_3F.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-B5zK9wcn.css">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script>
+(function () {
+  const PAPER_USAGE_KEY = 'peyman_paper_daily_usage_v2';
+  const GAME_STORAGE_KEY = 'willpower_kingdom_zero_v1';
+  const MAX_DAILY_PAPER_LOGS = 3; // حداکثر ۳ بار در روز
+  const MAX_SESSION_MINS = 600;   // حداکثر ۱۰ ساعت (۶۰۰ دقیقه) در هر سری
+  const MAX_SESSION_TESTS = 180;  // حداکثر ۱۸۰ تست در هر سری
+
+  let allowNextPaperClick = false;
+  let isCurrentlyInPaperModal = false;
+  let currentRealElapsedCap = 600;
+  let currentReferenceLabel = 'ساعت ۵:۰۰ صبح امروز';
+
+  // ۱. خواندن و مدیریت سهمیه ۳ بار در روز
+  function getTodayPaperUsage() {
+    const todayFa = new Date().toLocaleDateString('fa-IR');
+    try {
+      const data = JSON.parse(localStorage.getItem(PAPER_USAGE_KEY) || '{}');
+      if (data.date === todayFa) {
+        return { date: todayFa, count: Number(data.count) || 0 };
+      }
+    } catch (e) {}
+    return { date: todayFa, count: 0 };
+  }
+
+  function incrementTodayPaperUsage() {
+    const usage = getTodayPaperUsage();
+    localStorage.setItem(
+      PAPER_USAGE_KEY,
+      JSON.stringify({ date: usage.date, count: usage.count + 1 })
+    );
+  }
+
+  // ۲. خواندن زمان انتخاب‌شده روی اسلایدر
+  function getSelectedStudyMinutesFromDOM() {
+    const rangeInput = document.querySelector('input[type="range"]');
+    if (rangeInput && rangeInput.value) {
+      return parseInt(rangeInput.value, 10) || 45;
+    }
+    return 45;
+  }
+
+  // ۳. محاسبه دقیق زمان واقعی سپری‌شده از آخرین پارت ثبت‌شده
+  function getRealElapsedMinutesCap() {
+    const now = Date.now();
+    const todayStart = new Date();
+    todayStart.setHours(5, 0, 0, 0); // مبنای شروع روز: ۵ صبح
+    let referenceMs = todayStart.getTime();
+    let referenceLabel = 'ساعت ۵:۰۰ صبح امروز';
+
+    try {
+      const saved = JSON.parse(localStorage.getItem(GAME_STORAGE_KEY) || '{}');
+      const sessions = Array.isArray(saved.sessions) ? saved.sessions : [];
+
+      if (sessions.length > 0) {
+        let latestSession = sessions[0];
+        for (const s of sessions) {
+          if ((s.timestampMs || 0) > (latestSession.timestampMs || 0)) {
+            latestSession = s;
+          }
+        }
+        if (latestSession && latestSession.timestampMs) {
+          referenceMs = latestSession.timestampMs;
+          const endClock = latestSession.endTimeStr || latestSession.time || 'پارت قبلی';
+          referenceLabel = `پایان آخرین پارت شما (${latestSession.subject} در ساعت ${endClock})`;
+        }
+      }
+    } catch (e) {}
+
+    // اگر قبل از ۵ صبح بود، حداقل از ابتدای نیمه‌شب حساب کن
+    if (now < referenceMs) {
+      const midnight = new Date();
+      midnight.setHours(0, 0, 0, 0);
+      referenceMs = midnight.getTime();
+      referenceLabel = 'ابتدای امروز (۰۰:۰۰)';
+    }
+
+    const elapsedRealMins = Math.max(0, Math.floor((now - referenceMs) / 60000));
+    return {
+      elapsedRealMins,
+      referenceLabel,
+    };
+  }
+
+  // ۴. رهگیری کلیک روی دکمه «ثبت مطالعه روی کاغذ» و دکمه «ثبت نهایی در کارنامه»
+  window.addEventListener(
+    'click',
+    function (e) {
+      const btn = e.target.closest('button');
+      if (!btn || !btn.textContent) return;
+
+      const text = btn.textContent;
+
+      // الف) وقتی کاربر روی دکمه «📝 ثبت مطالعه روی کاغذ» کلیک می‌کند
+      if (text.includes('ثبت مطالعه روی کاغذ')) {
+        if (allowNextPaperClick) {
+          allowNextPaperClick = false;
+          isCurrentlyInPaperModal = true;
+          return;
+        }
+
+        e.stopImmediatePropagation();
+        e.preventDefault();
+
+        const usage = getTodayPaperUsage();
+
+        // قفل ۱: بررسی سهمیه حداکثر ۳ بار در روز
+        if (usage.count >= MAX_DAILY_PAPER_LOGS) {
+          alert(
+            `🔒 پایان سهمیه روزانه:\nشما امروز هر ${MAX_DAILY_PAPER_LOGS} سهمیه «ثبت مطالعه روی کاغذ» خود را استفاده کرده‌اید!\nبرای پارت‌های بعدی حتماً تایمر زنده را روشن کنید.`
+          );
+          return;
+        }
+
+        // قفل ۲: محاسبه زمان واقعی گذشته از پارت قبلی
+        const requestedMins = getSelectedStudyMinutesFromDOM();
+        const { elapsedRealMins, referenceLabel } = getRealElapsedMinutesCap();
+        currentRealElapsedCap = Math.min(MAX_SESSION_MINS, elapsedRealMins);
+        currentReferenceLabel = referenceLabel;
+
+        // جلوگیری از ثبت رگباری (حداقل ۱۵ دقیقه فاصله واقعی از آخرین پارت)
+        if (elapsedRealMins < 15) {
+          alert(
+            `⛔ قفل ضدتقلب زمان واقعی:\nاز ${referenceLabel} فقط ${elapsedRealMins} دقیقه در دنیای واقعی گذشته است!\nبرای ثبت پارت کاغذی جدید باید حداقل ۱۵ دقیقه از آخرین پارت شما در دنیای واقعی گذشته باشد.`
+          );
+          return;
+        }
+
+        // جلوگیری از ثبت زمان بیشتر از زمان واقعی سپری‌شده
+        if (requestedMins > elapsedRealMins) {
+          alert(
+            `⛔ خطای محاسباتی زمان واقعی!\n\n` +
+            `• زمان انتخابی شما روی اسلایدر: ${requestedMins} دقیقه\n` +
+            `• زمان واقعی گذشته از ${referenceLabel}: فقط ${elapsedRealMins} دقیقه!\n\n` +
+            `شما نمی‌توانید بیشتر از زمانی که در واقعیت گذشته است (${elapsedRealMins} دقیقه) مطالعه ثبت کنید. لطفاً ابتدا اسلایدر زمان پارت را به ${Math.min(120, elapsedRealMins)} دقیقه یا کمتر کاهش دهید.`
+          );
+          return;
+        }
+
+        // قفل ۳: بررسی سقف ۱۰ ساعت (۶۰۰ دقیقه)
+        if (requestedMins > MAX_SESSION_MINS) {
+          alert(
+            `⛔ سقف زمان مجاز:\nدر هر نوبت نمی‌توانید بیشتر از ۱۰ ساعت (${MAX_SESSION_MINS} دقیقه) مطالعه ثبت کنید.`
+          );
+          return;
+        }
+
+        // قفل ۴: دریافت گزارش مبحث خوانده‌شده (حداقل ۳۰ حرف)
+        const note = prompt(
+          `✅ بررسی زمان واقعی تایید شد! (سهمیه امروز: ${usage.count + 1} از ${MAX_DAILY_PAPER_LOGS})\n` +
+          `• زمان واقعی گذشته از ${referenceLabel}: ${elapsedRealMins} دقیقه\n` +
+          `• سقف مجاز هر نوبت: حداکثر ۱۰ ساعت و حداکثر ${MAX_SESSION_TESTS} تست\n\n` +
+          `📝 لطفاً نام دقیق مبحث، شماره صفحات و خلاصه نکاتی که روی کاغذ خوانده‌اید را بنویسید (حداقل ۳۰ حرف):`
+        );
+
+        if (!note || note.trim().length < 30) {
+          alert(
+            '❌ ثبت لغو شد! برای باز شدن قفل ثبت کاغذی، نوشتن توضیح کامل مبحث (حداقل ۳۰ حرف) الزامی است.'
+          );
+          return;
+        }
+
+        allowNextPaperClick = true;
+        btn.click();
+        return;
+      }
+
+      // ب) وقتی کاربر داخل مودال است و می‌خواهد دکمه نهایی «ثبت در کارنامه و کاشت درخت» را بزند
+      if (
+        isCurrentlyInPaperModal &&
+        (text.includes('ثبت در کارنامه و کاشت درخت') || text.includes('ثبت مرور و سبز کردن'))
+      ) {
+        const modalContainer = btn.closest('.fixed.inset-0');
+        if (modalContainer) {
+          const numInputs = Array.from(modalContainer.querySelectorAll('input[type="number"]'));
+
+          let totalTestsEntered = 0;
+          let totalMinsEntered = getSelectedStudyMinutesFromDOM();
+
+          // اگر مودال دارای ۷ ورودی است (۳ ورودی دقیقه درسنامه/تست/تحلیل + ۴ ورودی تعداد تست)
+          if (numInputs.length >= 7) {
+            const rMins = parseInt(numInputs[0].value, 10) || 0;
+            const tMins = parseInt(numInputs[1].value, 10) || 0;
+            const aMins = parseInt(numInputs[2].value, 10) || 0;
+            if (rMins + tMins + aMins > 0) {
+              totalMinsEntered = rMins + tMins + aMins;
+            }
+            totalTestsEntered = parseInt(numInputs[3].value, 10) || 0;
+          } else if (numInputs.length >= 4) {
+            // اگر مودال دارای ۴ ورودی تست است (کل تست، درست، غلط، نزده)
+            totalTestsEntered = parseInt(numInputs[0].value, 10) || 0;
+          }
+
+          const { elapsedRealMins, referenceLabel } = getRealElapsedMinutesCap();
+
+          // بررسی ۱: جلوگیری از ثبت بیش از ۱۰ ساعت (۶۰۰ دقیقه)
+          if (totalMinsEntered > MAX_SESSION_MINS) {
+            e.stopImmediatePropagation();
+            e.preventDefault();
+            alert(
+              `⛔ خطای سقف زمان:\nشما نمی‌توانید در یک نوبت بیشتر از ۱۰ ساعت (${MAX_SESSION_MINS} دقیقه) مطالعه ثبت کنید! (مقدار واردشده: ${totalMinsEntered} دقیقه)`
+            );
+            return;
+          }
+
+          // بررسی ۲: جلوگیری از ثبت زمان بیشتر از زمان واقعی گذشته در دنیا
+          if (totalMinsEntered > elapsedRealMins) {
+            e.stopImmediatePropagation();
+            e.preventDefault();
+            alert(
+              `⛔ خطای فیزیک زمان!\nاز ${referenceLabel} تا الان فقط ${elapsedRealMins} دقیقه در دنیای واقعی گذشته است!\nشما نمی‌توانید ${totalMinsEntered} دقیقه مطالعه ثبت کنید. لطفاً زمان را به حداکثر ${elapsedRealMins} دقیقه کاهش دهید.`
+            );
+            return;
+          }
+
+          // بررسی ۳: جلوگیری از ثبت بیش از ۱۸۰ تست در هر سری
+          if (totalTestsEntered > MAX_SESSION_TESTS) {
+            e.stopImmediatePropagation();
+            e.preventDefault();
+            alert(
+              `⛔ خطای سقف تعداد تست!\nدر ثبت مطالعه روی کاغذ، حداکثر تعداد تست مجاز در هر سری ${MAX_SESSION_TESTS} تست است (عدد واردشده توسط شما: ${totalTestsEntered} تست).\nلطفاً تعداد کل تست‌ها را به ${MAX_SESSION_TESTS} یا کمتر اصلاح کنید.`
+            );
+            return;
+          }
+        }
+
+        // همه شروط رعایت شده‌اند -> ۱ واحد از سهمیه ۳تایی امروز کم کن و اجازه ثبت بده
+        incrementTodayPaperUsage();
+        isCurrentlyInPaperModal = false;
+      }
+
+      // ج) اگر کاربر دکمه شروع تایمر عادی را زد، حالت مودال کاغذی غیرفعال شود
+      if (text.includes('شروع مطالعه')) {
+        isCurrentlyInPaperModal = false;
+      }
+    },
+    true
+  );
+})();
+</script>
+  </body>
+</html>
